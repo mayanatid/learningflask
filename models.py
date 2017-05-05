@@ -1,9 +1,10 @@
 from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash
 
-db = SQLAlchemy()
+db = SQLAlchemy() # create SQLAlchemy object
 
-class User(db.Model):
+class User(db.Model): # Create a User class to use in the database
+  # Properties
   __tablename__ = 'users'
   uid = db.Column(db.Integer, primary_key = True)
   firstname = db.Column(db.String(100))
@@ -11,14 +12,15 @@ class User(db.Model):
   email= db.Column(db.String(120), unique=True)
   pwdhash = db.Column(db.String(54))
 
+  # Methods
   def __init__(self, firstname, lastname, email, password):
     self.firstname = firstname.title()
     self.lastname = lastname.title()
     self.email = email.lower()
     self.set_password(password)
      
-  def set_password(self, password):
+  def set_password(self, password): # password hash
     self.pwdhash = generate_password_hash(password)
 
-  def check_password(self, password):
+  def check_password(self, password): # Used for checking if the password matches
     return check_password_hash(self.pwdhash, password)
